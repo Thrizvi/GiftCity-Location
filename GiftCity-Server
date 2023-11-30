@@ -1,0 +1,30 @@
+var op = new GlideRecord('cmdb_ci_server');
+     op.addEncodedQuery('ip_addressSTARTSWITH10.200^ORip_addressSTARTSWITH10.208');
+     op.addQuery('name','IFSC-DC-IRS');
+	 
+     op.query();
+     if(op.next()){
+      	var g = new GlideRecord('u_infra_checklist');
+     	g.addQuery('u_host_name','IFSC-DC-IRS');
+       	
+		g.query();
+       	if(g.next()){
+      		
+            if (op.ip_address.startsWith('10.200')) {
+                g.u_location = 'GIFT City - New';
+                gs.log('GIFT City - New update '+ op.name);
+            }else if(op.ip_address.startsWith('10.208')){
+                g.u_location = 'GIFT City - DR';
+                gs.log('GIFT City - DR  update '+ op.name);
+            }
+     }
+     	else{          	
+          	if (op.ip_address.startsWith('10.200')) {
+                g.u_location = 'GIFT City - New';
+                gs.log('GIFT City - New Insert '+ op.name);
+            }else if(op.ip_address.startsWith('10.208')){
+                g.u_location = 'GIFT City - DR';
+                gs.log('GIFT City - DR Insert '+ op.name);
+            }
+      	}
+  }
